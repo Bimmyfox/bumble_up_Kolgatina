@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game
 {
@@ -8,6 +10,9 @@ namespace Game
 
         Player player;
         StairwayGeneration stairway;
+        public Queue<Enemy> enemies;
+
+        //public Queue<Enemy> Enemies { get => enemies; set => enemies = value; }
 
         public Player Player
         {
@@ -34,6 +39,20 @@ namespace Game
         {
             if (self == null)
                 self = this;
+            enemies = new Queue<Enemy>();
+        }
+
+        void Update()
+        {
+            if (CheckDefeat())
+            {
+                Debug.Log("Defeat :(");            
+            }
+        }
+
+        bool CheckDefeat()
+        {
+            return !player.isActiveAndEnabled;
         }
     }
 }

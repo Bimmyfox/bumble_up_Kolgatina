@@ -11,12 +11,11 @@ namespace Game
         SwipeRight
     }
 
-    public class Player : MonoBehaviour
+    public class Player : Unit
     {
         [SerializeField] float jumpForce = 25f;
         [SerializeField] float swipeForce = 5f;
         [SerializeField] float coefForce = 500f;
-        Rigidbody rb;
 
         bool moving = false;
         PlayerFSM currentState = PlayerFSM.Idle;
@@ -32,9 +31,9 @@ namespace Game
             }
         }
 
-        void Start()
+        protected override void Start()
         {
-            rb = GetComponent<Rigidbody>();
+            base.Start();
             Main.self.Player = this;
         }
 
@@ -91,10 +90,27 @@ namespace Game
 
         void OnCollisionEnter(Collision collision)
         {
+            //после соприкосания с лестницей
+            //перемещение вновь доступно
             if (collision.gameObject.CompareTag("Floor"))
             {
                 moving = false;
                 ResetState();
+            }
+
+            //столкнулся с врагом - "смерть"
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                gameObject.SetActive(false);
+            }
+        }
+
+        void OnTriggerEnter(Collider other)
+        {
+            //выпал за пределы лестницы - "смерть"
+            if (other.gameObject.CompareTag("FallTrigger"))
+            {
+                gameObject.SetActive(false);
             }
         }
 
