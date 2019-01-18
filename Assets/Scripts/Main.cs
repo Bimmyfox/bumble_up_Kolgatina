@@ -7,7 +7,8 @@ namespace Game
         public static Main self = null;
 
         Player player;
-       
+        StairwayGeneration stairway;
+
         public Player Player
         {
             get { return player; }
@@ -17,6 +18,17 @@ namespace Game
                     player = value;
             }
         }
+
+        public StairwayGeneration Stairway
+        {
+            get { return stairway; }
+            set
+            {
+                if (value)
+                    stairway = value;
+            }
+        }
+
 
         void Awake()
         {

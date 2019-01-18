@@ -6,9 +6,8 @@ namespace Game
     public class Player : MonoBehaviour
     {
         Rigidbody rb;
-        [SerializeField] float jumpForce = 250f;
-        [SerializeField] float swipeForce = 25f;
-
+        [SerializeField] float jumpForce = 350f;
+        [SerializeField] float swipeForce = 35f;
 
         void Start()
         {
@@ -16,22 +15,22 @@ namespace Game
             rb = GetComponent<Rigidbody>();
         }
 
-      
+
         public void Jump()
         {
-            rb.AddForce(Vector3.up * jumpForce);
+            rb.AddForce(Vector3.up * jumpForce * Time.deltaTime);
             StartCoroutine(ResetForces());
         }
 
         public void SwipeLeft()
         {
-            rb.AddForce(Vector3.back * swipeForce);
+            rb.AddForce(Vector3.back * swipeForce * Time.deltaTime);
             StartCoroutine(ResetForces());
         }
 
         public void SwipeRight()
         {
-            rb.AddForce(Vector3.forward * swipeForce);
+            rb.AddForce(Vector3.forward * swipeForce * Time.deltaTime);
             StartCoroutine(ResetForces());
         }
 

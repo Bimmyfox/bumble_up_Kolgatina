@@ -29,12 +29,14 @@ namespace Game
             if (Input.touches.Length == 1)
             {
                 Main.self.Player.Jump();
+                Main.self.Stairway.Movement();
             }
 
 #if UNITY_EDITOR
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
             {
                 Main.self.Player.Jump();
+                Main.self.Stairway.Movement();
             }
 #endif
         }
