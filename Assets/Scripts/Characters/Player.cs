@@ -16,6 +16,7 @@ namespace Game
         [SerializeField] float jumpForce = 25f;
         [SerializeField] float swipeForce = 5f;
         [SerializeField] float coefForce = 500f;
+        [SerializeField] GameObject die;
 
         bool moving = false;
         PlayerFSM currentState = PlayerFSM.Idle;
@@ -102,6 +103,7 @@ namespace Game
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 gameObject.SetActive(false);
+                Instantiate(die, transform.position, transform.rotation);
             }
         }
 
