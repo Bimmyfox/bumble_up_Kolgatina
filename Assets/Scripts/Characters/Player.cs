@@ -3,41 +3,110 @@ using UnityEngine;
 
 namespace Game
 {
+    public enum PlayerFSM
+    {
+        Idle,
+        Jump,
+        SwipeLeft,
+        SwipeRight
+    }
+
     public class Player : MonoBehaviour
     {
+        [SerializeField] float jumpForce = 25f;
+        [SerializeField] float swipeForce = 5f;
+        [SerializeField] float coefForce = 500f;
         Rigidbody rb;
-        [SerializeField] float jumpForce = 350f;
-        [SerializeField] float swipeForce = 35f;
+
+        bool moving = false;
+        PlayerFSM currentState = PlayerFSM.Idle;
+
+        //поменять можно, только если игрок стоит на месте
+        public PlayerFSM State
+        {
+            get { return currentState; }
+            set
+            {
+                if (currentState == PlayerFSM.Idle)
+                    currentState = value;
+            }
+        }
 
         void Start()
         {
-            Main.self.Player = this;
             rb = GetComponent<Rigidbody>();
+            Main.self.Player = this;
         }
 
-
-        public void Jump()
+        void FixedUpdate()
         {
-            rb.AddForce(Vector3.up * jumpForce * Time.deltaTime);
-            StartCoroutine(ResetForces());
+            DoAction(currentState);
         }
 
-        public void SwipeLeft()
+        protected void DoAction(PlayerFSM state)
         {
-            rb.AddForce(Vector3.back * swipeForce * Time.deltaTime);
-            StartCoroutine(ResetForces());
+            if (moving)
+                return;
+
+            if (state == PlayerFSM.Jump)
+                Jump();
+
+            if (state == PlayerFSM.SwipeLeft)
+                SwipeLeft();
+
+            if (state == PlayerFSM.SwipeRight)
+                SwipeRight();
         }
 
-        public void SwipeRight()
+        void Jump()
         {
-            rb.AddForce(Vector3.forward * swipeForce * Time.deltaTime);
-            StartCoroutine(ResetForces());
+            Main.self.Stairway.Movement(); //!!!
+            Up(jumpForce);
         }
 
-        IEnumerator ResetForces()
+        void Up(float jumpForce)
         {
-            yield return new WaitForSeconds(1f);
+            moving = true;
+            rb.AddForce(Vector3.up * jumpForce * coefForce * Time.deltaTime);
+        }
+
+        void SwipeLeft()
+        {
+            moving = true;
+            StartCoroutine(Swipe(Vector3.back));
+        }
+
+        void SwipeRight()
+        {
+            moving = true;
+            StartCoroutine(Swipe(Vector3.forward));
+        }
+
+        IEnumerator Swipe(Vector3 destination)
+        {
+            Up(jumpForce / 2f); // при движении в сторону высота прыжка меньше
+            yield return new WaitForSeconds(0.01f);
+            rb.AddForce(destination * swipeForce * coefForce * Time.deltaTime);
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Floor"))
+            {
+                moving = false;
+                ResetState();
+            }
+        }
+
+        void ResetState()
+        {
             rb.velocity = Vector3.zero;
+            currentState = PlayerFSM.Idle;
+        }
+
+        void OnDestroy()
+        {
+            StopAllCoroutines();
         }
     }
 }
