@@ -114,11 +114,10 @@ namespace Game
             }
         }
 
-        void ResetState()
+        protected override void ResetState()
         {
-            rb.velocity = Vector3.zero;
+            base.ResetState();
             currentState = PlayerFSM.Idle;
-            StopAllCoroutines();
         }
 
         void OnDestroy()

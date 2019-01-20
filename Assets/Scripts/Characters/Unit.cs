@@ -23,6 +23,12 @@ namespace Game
             rb.AddForce(direction * jumpForce * coefForce * Time.fixedDeltaTime);
         }
 
+        protected virtual void ResetState()
+        {
+            rb.velocity = Vector3.zero;
+            StopAllCoroutines();
+        }
+
         protected virtual IEnumerator Jump() { yield return null; }
     }
 }

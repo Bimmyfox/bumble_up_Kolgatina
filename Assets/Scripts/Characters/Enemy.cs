@@ -17,6 +17,14 @@ namespace Game
             deltaForcesTime = 1 / thrust;
         }
 
+        public void Respawn(Vector3 position)
+        {
+            ResetState();
+
+            transform.position = startPosition;
+            gameObject.SetActive(true);
+        }
+
         void OnCollisionEnter(Collision collision)
         {
             //после приземления на лестницу новый прыжок
@@ -33,6 +41,14 @@ namespace Game
             Thrust(Vector3.up, jumpForce);
             yield return new WaitForSeconds(deltaForcesTime);
             Thrust(Vector3.right, thrust);
+        }
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("FallTrigger"))
+            {
+                Destroy(gameObject);
+            }
         }
 
         void OnDestroy()

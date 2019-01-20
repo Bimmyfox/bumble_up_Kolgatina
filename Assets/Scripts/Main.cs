@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +10,7 @@ namespace Game
         public static Main self = null;
 
         Player player;
-        public Queue<Enemy> enemies;
-
+ 
         public Player Player
         {
             get { return player; }
@@ -25,8 +25,8 @@ namespace Game
         {
             if (self == null)
                 self = this;
-            enemies = new Queue<Enemy>();
         }
+
 
         void Update()
         {
@@ -36,6 +36,8 @@ namespace Game
                 return;
             }
         }
+
+      
 
         bool CheckDefeat()
         {
