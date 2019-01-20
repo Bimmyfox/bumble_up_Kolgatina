@@ -1,33 +1,43 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+
 
 namespace Game
 {
     public class Enemy : Unit
     {
+        //jumpForce = 17f
+        [SerializeField] float thrust = 5.08f;
+        [SerializeField] float speed = 1.2f;
+        float deltaForcesTime;
 
         protected override void Start()
         {
             base.Start();
+            deltaForcesTime = 1 / thrust;
         }
 
-        void Spawn(Enemy enemy, Vector3 spawnPosition)
+        void OnCollisionEnter(Collision collision)
         {
-            enemy.gameObject.SetActive(true);
-            enemy.transform.position = spawnPosition;
-        }
-
-        //перемещение вниз
-        void Movement()
-        { }
-
-        void OnTriggerEnter(Collider other)
-        {
-            //при выходе за пределы игрового поля встаёт в очередь на перерождение
-            if (other.gameObject.CompareTag("FallTrigger"))
+            //после приземления на лестницу новый прыжок
+            if (collision.gameObject.CompareTag("Floor"))
             {
-                Main.self.enemies.Enqueue(this);
-                gameObject.SetActive(false);
+                StopCoroutine(Jump());
+                StartCoroutine(Jump());
             }
+        }
+
+        protected override IEnumerator Jump()
+        {
+            rb.velocity = Vector3.zero;
+            Thrust(Vector3.up, jumpForce);
+            yield return new WaitForSeconds(deltaForcesTime);
+            Thrust(Vector3.right, thrust);
+        }
+
+        void OnDestroy()
+        {
+            StopAllCoroutines();
         }
     }
 }

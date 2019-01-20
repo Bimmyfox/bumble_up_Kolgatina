@@ -1,13 +1,28 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
-public class Unit : MonoBehaviour
+
+namespace Game
 {
-
-    protected Rigidbody rb;
-
-    // Use this for initialization
-    protected virtual void Start()
+    public class Unit : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody>();
+        protected Rigidbody rb;
+        protected Vector3 startPosition;
+        [SerializeField] protected float coefForce = 500f;
+        [SerializeField] protected float jumpForce = 100f;
+
+
+        protected virtual void Start()
+        {
+            rb = GetComponent<Rigidbody>();
+            startPosition = transform.position;
+        }
+
+        protected virtual void Thrust(Vector3 direction, float jumpForce)
+        {
+            rb.AddForce(direction * jumpForce * coefForce * Time.fixedDeltaTime);
+        }
+
+        protected virtual IEnumerator Jump() { yield return null; }
     }
 }

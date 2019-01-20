@@ -12,7 +12,6 @@ namespace Game
         StairwayGeneration stairway;
         public Queue<Enemy> enemies;
 
-        //public Queue<Enemy> Enemies { get => enemies; set => enemies = value; }
 
         public Player Player
         {
@@ -34,7 +33,6 @@ namespace Game
             }
         }
 
-
         void Awake()
         {
             if (self == null)
@@ -46,7 +44,8 @@ namespace Game
         {
             if (CheckDefeat())
             {
-                Debug.Log("Defeat :(");            
+                Debug.Log("Defeat :(");
+                return;
             }
         }
 

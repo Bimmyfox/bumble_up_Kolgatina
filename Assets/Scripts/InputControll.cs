@@ -9,17 +9,16 @@ namespace Game
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            swipe = true;
             if (Mathf.Abs(eventData.delta.x) > Mathf.Abs(eventData.delta.y))
             {
                 if (eventData.delta.x > 0)
                 {
-                    swipe = true;
-                    //      Main.self.Player.State = PlayerFSM.SwipeRight;
+                    Main.self.Player.State = PlayerFSM.SwipeRight;
                 }
                 else
                 {
-                    swipe = true;
-                    //      Main.self.Player.State = PlayerFSM.SwipeLeft;
+                    Main.self.Player.State = PlayerFSM.SwipeLeft;
                 }
             }
         }
@@ -29,20 +28,11 @@ namespace Game
             swipe = false;
         }
 
-        public void OnDrag(PointerEventData eventData) { }
-
         void Update()
         {
-            if (Input.touchCount > 0)
+            if (Input.touchCount == 2)
             {
-                //if (tapPosition == Input.touches[0].position) ;
-                //Touch touch = Input.GetTouch(0);
-                //if (touch.phase != TouchPhase.Moved && Input.touchCount == 1)
-
-                if (Input.touchCount == 1)
-                {
-                    Main.self.Player.State = PlayerFSM.Jump;
-                }
+                Main.self.Player.State = PlayerFSM.Jump;
             }
 
 #if UNITY_EDITOR
@@ -52,5 +42,8 @@ namespace Game
             }
 #endif
         }
+
+        public void OnDrag(PointerEventData eventData) { }
+
     }
 }

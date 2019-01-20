@@ -13,15 +13,14 @@ namespace Game
 
     public class Player : Unit
     {
-        [SerializeField] float jumpForce = 25f;
+        // jumpForce = 25f;
         [SerializeField] float swipeForce = 5f;
-        [SerializeField] float coefForce = 500f;
         [SerializeField] GameObject die;
 
         bool moving = false;
         PlayerFSM currentState = PlayerFSM.Idle;
 
-        //поменять можно, только если игрок стоит на месте
+        //изменить состояние можно, только если игрок стоит на месте
         public PlayerFSM State
         {
             get { return currentState; }
@@ -49,7 +48,7 @@ namespace Game
                 return;
 
             if (state == PlayerFSM.Jump)
-                Jump();
+                StartCoroutine(Jump());
 
             if (state == PlayerFSM.SwipeLeft)
                 SwipeLeft();
@@ -58,35 +57,34 @@ namespace Game
                 SwipeRight();
         }
 
-        void Jump()
-        {
-            Main.self.Stairway.Movement(); //!!!
-            Up(jumpForce);
-        }
-
-        void Up(float jumpForce)
+        protected override void Thrust(Vector3 direction, float jumpForce)
         {
             moving = true;
-            rb.AddForce(Vector3.up * jumpForce * coefForce * Time.deltaTime);
+            base.Thrust(direction, jumpForce);
         }
 
         void SwipeLeft()
         {
-            moving = true;
             StartCoroutine(Swipe(Vector3.back));
         }
 
         void SwipeRight()
         {
-            moving = true;
             StartCoroutine(Swipe(Vector3.forward));
+        }
+
+        protected override IEnumerator Jump()
+        {
+            Thrust(Vector3.up, jumpForce);
+            yield return new WaitForSeconds(.2f);
+            Thrust(Vector3.left, jumpForce / 2);
         }
 
         IEnumerator Swipe(Vector3 destination)
         {
-            Up(jumpForce / 2f); // при движении в сторону высота прыжка меньше
+            Thrust(Vector3.up, jumpForce / 2f); // при движении в сторону высота прыжка меньше
             yield return new WaitForSeconds(0.01f);
-            rb.AddForce(destination * swipeForce * coefForce * Time.deltaTime);
+            Thrust(destination, swipeForce);
         }
 
         void OnCollisionEnter(Collision collision)
@@ -120,6 +118,7 @@ namespace Game
         {
             rb.velocity = Vector3.zero;
             currentState = PlayerFSM.Idle;
+            StopAllCoroutines();
         }
 
         void OnDestroy()
