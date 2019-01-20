@@ -9,9 +9,7 @@ namespace Game
         public static Main self = null;
 
         Player player;
-        StairwayGeneration stairway;
         public Queue<Enemy> enemies;
-
 
         public Player Player
         {
@@ -20,16 +18,6 @@ namespace Game
             {
                 if (value)
                     player = value;
-            }
-        }
-
-        public StairwayGeneration Stairway
-        {
-            get { return stairway; }
-            set
-            {
-                if (value)
-                    stairway = value;
             }
         }
 
