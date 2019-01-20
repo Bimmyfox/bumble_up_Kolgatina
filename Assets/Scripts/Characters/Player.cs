@@ -17,8 +17,16 @@ namespace Game
         [SerializeField] float swipeForce = 5f;
         [SerializeField] GameObject die;
 
+        int numStairs = 0;
+        bool jumped = false;
         bool moving = false;
         PlayerFSM currentState = PlayerFSM.Idle;
+
+
+        public int NumOvercomedStairs
+        {
+            get { return numStairs; }
+        }
 
         //изменить состояние можно, только если игрок стоит на месте
         public PlayerFSM State
@@ -31,6 +39,9 @@ namespace Game
             }
         }
 
+
+
+
         protected override void Start()
         {
             base.Start();
@@ -42,6 +53,8 @@ namespace Game
             DoAction(currentState);
         }
 
+
+        //передвижения
         protected void DoAction(PlayerFSM state)
         {
             if (moving)
@@ -63,6 +76,14 @@ namespace Game
             base.Thrust(direction, jumpForce);
         }
 
+        protected override IEnumerator Jump()
+        {
+            jumped = true;
+            Thrust(Vector3.up, jumpForce);
+            yield return new WaitForSeconds(.2f);
+            Thrust(Vector3.left, jumpForce / 2);
+        }
+
         void SwipeLeft()
         {
             StartCoroutine(Swipe(Vector3.back));
@@ -73,13 +94,6 @@ namespace Game
             StartCoroutine(Swipe(Vector3.forward));
         }
 
-        protected override IEnumerator Jump()
-        {
-            Thrust(Vector3.up, jumpForce);
-            yield return new WaitForSeconds(.2f);
-            Thrust(Vector3.left, jumpForce / 2);
-        }
-
         IEnumerator Swipe(Vector3 destination)
         {
             Thrust(Vector3.up, jumpForce / 2f); // при движении в сторону высота прыжка меньше
@@ -87,10 +101,19 @@ namespace Game
             Thrust(destination, swipeForce);
         }
 
+
+        //столкновения
         void OnCollisionEnter(Collision collision)
         {
             //после соприкосания с лестницей
             //перемещение вновь доступно
+            //+1 очко
+            if (collision.gameObject.CompareTag("Floor") && jumped)
+            {
+                numStairs++;
+                jumped = false;
+            }
+
             if (collision.gameObject.CompareTag("Floor"))
             {
                 moving = false;
@@ -113,6 +136,7 @@ namespace Game
                 gameObject.SetActive(false);
             }
         }
+
 
         protected override void ResetState()
         {
