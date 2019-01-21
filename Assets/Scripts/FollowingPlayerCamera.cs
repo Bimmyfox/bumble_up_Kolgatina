@@ -1,23 +1,29 @@
 ﻿using UnityEngine;
 
-public class FollowingPlayerCamera : MonoBehaviour {
+public class FollowingPlayerCamera : MonoBehaviour
+{
 
-    [SerializeField] float move_speed = 3;        
-    [SerializeField] Transform target;            
-    [SerializeField] Vector3 distance = new Vector3(6.6f, 1f, 5f);
+    [SerializeField] float moveSpeed = 3f;
+    [SerializeField] Transform target;
+    [SerializeField] Vector3 distance = new Vector3(6.6f, 1f, 4f);
+    Vector3 destionation = Vector3.zero;
 
     void Start()
     {
         FindAndTargetPlayer();
         if (target == null)
             return;
+        destionation.z = distance.z; 
     }
+
 
     void FixedUpdate()
     {
         if (target == null)
             return;
-        transform.position = Vector3.Lerp(transform.position, target.position + distance, Time.fixedDeltaTime * move_speed);
+        destionation.x = target.position.x + distance.x;
+        destionation.y = target.position.y + distance.y;
+        transform.position = Vector3.Lerp(transform.position, destionation, Time.fixedDeltaTime * moveSpeed);
     }
 
     void FindAndTargetPlayer()
