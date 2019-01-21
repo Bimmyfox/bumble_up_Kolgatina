@@ -44,9 +44,9 @@ namespace Game
 
         public void Quit()
         {
-#if UNITY_STANDALONE
-		        Application.Quit();
-#endif
+
+            Application.Quit();
+
 
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
