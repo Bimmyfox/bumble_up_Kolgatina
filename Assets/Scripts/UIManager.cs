@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Game
@@ -10,7 +11,7 @@ namespace Game
         [SerializeField] GameObject gameOverPanel;
         bool gameOverAndResultWasShown;
 
-        
+
         void Update()
         {
             if (gameOverAndResultWasShown)
@@ -33,6 +34,25 @@ namespace Game
             pointsEndGame.text = string.Format("{0}", Main.self.Player.NumOvercomedStairs);
             gameOverPanel.SetActive(true);
             gameOverAndResultWasShown = true;
+        }
+
+        public void Restart()
+        {
+            gameOverAndResultWasShown = false;
+            gameOverPanel.SetActive(false);
+
+            SceneManager.LoadScene("Main");
+        }
+
+        public void Quit()
+        {
+            #if UNITY_STANDALONE
+		        Application.Quit();
+            #endif
+
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #endif
         }
     }
 }
