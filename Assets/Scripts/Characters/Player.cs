@@ -14,7 +14,7 @@ namespace Game
     public class Player : Unit
     {
         // jumpForce = 25f;
-        [SerializeField] float swipeForce = 5f;
+        [SerializeField] float swipeForce = 15f;
         [SerializeField] GameObject die;
 
         int numStairs = 0;
