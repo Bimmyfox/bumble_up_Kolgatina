@@ -20,8 +20,8 @@ namespace Game
             }
 
             newPosition = transform.parent.GetChild(0).transform.position;
-            newPosition.x -= transform.parent.childCount - 3; //новая лестница пересекается со старой
-            newPosition.y += transform.parent.childCount - 3; //(незаметно игроку)
+            newPosition.x -= transform.parent.childCount - 2; //новая лестница пересекается со старой
+            newPosition.y += transform.parent.childCount - 2; //(незаметно игроку)
         }
 
         void OnTriggerEnter(Collider other)
