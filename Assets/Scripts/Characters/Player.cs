@@ -55,8 +55,15 @@ namespace Game.Characters
             jumped = true;
             rb.velocity = Vector3.zero;
             Thrust(Vector3.up, jumpForce);
-            yield return new WaitForSeconds(.2f);
-            Thrust(Vector3.left, jumpForce / 2);
+            yield return new WaitForSeconds(0.2f);
+            StartCoroutine(SpeedUpJump());
+        }
+
+        IEnumerator SpeedUpJump()
+        {
+            Thrust(Vector3.left, jumpForce);
+            yield return new WaitForSeconds(0.1f);
+            Thrust(Vector3.down, jumpForce / 2);
         }
 
 
@@ -76,7 +83,7 @@ namespace Game.Characters
                 SwipeRight();
         }
 
-       
+
         void SwipeLeft()
         {
             StartCoroutine(Swipe(Vector3.back));
