@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 
-public class DeleteStairway : MonoBehaviour {
-
-    void OnTriggerEnter(Collider other)
+//при пересечении игроком триггера лестница уничтожается со сцены
+namespace Game.Environment
+{
+    public class DeleteStairway : MonoBehaviour
     {
-        if (other.gameObject.CompareTag("Player"))
+        void OnTriggerEnter(Collider other)
         {
-            Destroy(transform.parent.gameObject);
+            if (other.gameObject.CompareTag("Player"))
+                Destroy(transform.parent.gameObject);
         }
     }
 }

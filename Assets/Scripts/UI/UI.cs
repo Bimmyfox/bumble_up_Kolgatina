@@ -3,30 +3,38 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Game
+namespace Game.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UI : MonoBehaviour
     {
         [SerializeField] Text points;
         [SerializeField] Text pointsEndGame;
         [SerializeField] GameObject gameOverPanel;
-        bool gameOverAndResultWasShown = false;
 
+
+        public void Restart()
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene("Main", LoadSceneMode.Single);
+        }
+
+        public void Exit()
+        {
+
+            Application.Quit();
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        }
 
         void Update()
         {
-            if (gameOverAndResultWasShown)
-                return;
-
             if (Main.self.StateGame == StateGame.PLAY)
-            {
                 points.text = string.Format("{0}", Main.self.Player.NumOvercomedStairs);
-            }
 
             if (Main.self.StateGame == StateGame.DEFEAT)
-            {
                 StartCoroutine(ShowDefeat());
-            }
         }
 
         IEnumerator ShowDefeat()
@@ -34,23 +42,12 @@ namespace Game
             yield return new WaitForSeconds(.5f);
             pointsEndGame.text = string.Format("{0}", Main.self.Player.NumOvercomedStairs);
             gameOverPanel.SetActive(true);
-            gameOverAndResultWasShown = true;
+            Time.timeScale = 0;
         }
 
-        public void Restart()
+        void OnDestroy()
         {
-            SceneManager.LoadScene("Main");
-        }
-
-        public void Quit()
-        {
-
-            Application.Quit();
-
-
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#endif
+            StopAllCoroutines();
         }
     }
 }

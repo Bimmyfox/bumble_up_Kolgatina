@@ -1,26 +1,18 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Game
+namespace Game.Characters
 {
-    public enum PlayerFSM
-    {
-        Idle,
-        Jump,
-        SwipeLeft,
-        SwipeRight
-    }
-
     public class Player : Unit
     {
         // jumpForce = 25f;
         [SerializeField] float swipeForce = 15f;
-        [SerializeField] GameObject die;
+        [SerializeField] GameObject beautifulDieEffect;
 
         int numStairs = 0;
         bool jumped = false;
         bool moving = false;
-        PlayerFSM currentState = PlayerFSM.Idle;
+        PlayerState currentState = PlayerState.Idle;
 
 
         public int NumOvercomedStairs
@@ -28,18 +20,16 @@ namespace Game
             get { return numStairs; }
         }
 
-        //изменить состояние можно, только если игрок стоит на месте
-        public PlayerFSM State
+        public PlayerState State
         {
             get { return currentState; }
             set
             {
-                if (currentState == PlayerFSM.Idle)
+                //изменить состояние можно, только если игрок стоит на месте
+                if (currentState == PlayerState.Idle)
                     currentState = value;
             }
         }
-
-
 
 
         protected override void Start()
@@ -48,42 +38,44 @@ namespace Game
             Main.self.Player = this;
         }
 
-        void FixedUpdate()
-        {
-            DoAction(currentState);
-        }
-
-
-        //передвижения
-        protected void DoAction(PlayerFSM state)
-        {
-            if (moving)
-                return;
-
-            if (state == PlayerFSM.Jump)
-                StartCoroutine(Jump());
-
-            if (state == PlayerFSM.SwipeLeft)
-                SwipeLeft();
-
-            if (state == PlayerFSM.SwipeRight)
-                SwipeRight();
-        }
-
         protected override void Thrust(Vector3 direction, float jumpForce)
         {
             moving = true;
             base.Thrust(direction, jumpForce);
         }
 
-        protected override IEnumerator Jump()
+        void FixedUpdate()
+        {
+            DoAction(currentState);
+        }
+
+        IEnumerator Jump()
         {
             jumped = true;
+            rb.velocity = Vector3.zero;
             Thrust(Vector3.up, jumpForce);
             yield return new WaitForSeconds(.2f);
             Thrust(Vector3.left, jumpForce / 2);
         }
 
+
+        //передвижения
+        void DoAction(PlayerState state)
+        {
+            if (moving)
+                return;
+
+            if (state == PlayerState.Jump)
+                StartCoroutine(Jump());
+
+            if (state == PlayerState.SwipeLeft)
+                SwipeLeft();
+
+            if (state == PlayerState.SwipeRight)
+                SwipeRight();
+        }
+
+       
         void SwipeLeft()
         {
             StartCoroutine(Swipe(Vector3.back));
@@ -124,7 +116,7 @@ namespace Game
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 gameObject.SetActive(false);
-                Instantiate(die, transform.position, transform.rotation);
+                Instantiate(beautifulDieEffect, transform.position, transform.rotation);
             }
         }
 
@@ -132,21 +124,13 @@ namespace Game
         {
             //выпал за пределы лестницы - "смерть"
             if (other.gameObject.CompareTag("FallTrigger"))
-            {
                 gameObject.SetActive(false);
-            }
         }
-
 
         protected override void ResetState()
         {
             base.ResetState();
-            currentState = PlayerFSM.Idle;
-        }
-
-        void OnDestroy()
-        {
-            StopAllCoroutines();
+            currentState = PlayerState.Idle;
         }
     }
 }

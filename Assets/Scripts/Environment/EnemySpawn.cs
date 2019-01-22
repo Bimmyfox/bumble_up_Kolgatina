@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using Game.Characters;
+using System.Collections;
 using UnityEngine;
 
-namespace Game
+namespace Game.Environment
 {
     public class EnemySpawn : MonoBehaviour
     {
@@ -12,6 +13,7 @@ namespace Game
         Vector3 spawnPosition;
         Vector3 enemyScale;
         Vector3 playerScale;
+
 
         void Start()
         {

@@ -1,20 +1,15 @@
-﻿using UnityEngine;
+﻿using Game.Characters;
+using UnityEngine;
 
 namespace Game
 {
-    public enum StateGame
-    {
-        PLAY,
-        DEFEAT
-    };
-
     public class Main : MonoBehaviour
     {
-
         public static Main self = null;
 
         Player player;
         StateGame stateGame;
+
 
         public Player Player
         {

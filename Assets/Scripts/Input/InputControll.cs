@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Game.Characters;
 
-namespace Game
+namespace Game.InputControll
 {
     public class InputControll : MonoBehaviour
     {
-        Vector3 firstTouchPosition;   //Первая позиция касания
-        Vector3 lastTouchPosition;    //Последняя позиция касания
-        [SerializeField] float dragDistance = 10f;  //Минимальная дистанция для определения свайпа
+        [SerializeField] float dragDistance = 10f;  //минимальная дистанция для определения свайпа
 
+        Vector3 firstTouchPosition;                 //позиция первого касания
+        Vector3 lastTouchPosition;                  //позиция последнего касания
         List<Vector3> touchPositions = new List<Vector3>();
+
 
         void Start()
         {
@@ -20,43 +22,22 @@ namespace Game
         {
             MobileInput();
 
-
 #if UNITY_EDITOR
             UnityEditorInput();
 #endif
         }
 
-        void UnityEditorInput()
-        {
-            if (Input.GetKeyDown("space"))
-            {
-                Main.self.Player.State = PlayerFSM.Jump;
-            }
-            if (Input.GetKeyDown("left"))
-            {
-                Main.self.Player.State = PlayerFSM.SwipeLeft;
-            }
-            if (Input.GetKeyDown("right"))
-            {
-                Main.self.Player.State = PlayerFSM.SwipeRight;
-            }
-        }
-
-
         void MobileInput()
         {
             if (Input.touchCount <= 0)
-            { return; }
+                return;
+
             if (Input.touches[0].phase == TouchPhase.Moved)
-            {
                 touchPositions.Add(Input.touches[0].position);
-            }
 
             //Касание
             if (Input.touches[0].phase == TouchPhase.Ended && touchPositions.Count == 0)
-            {
-                Main.self.Player.State = PlayerFSM.Jump;
-            }
+                Main.self.Player.State = PlayerState.Jump;
 
             //Свайп
             if (Input.touches[0].phase == TouchPhase.Ended && touchPositions.Count > 0)
@@ -64,29 +45,33 @@ namespace Game
                 firstTouchPosition = touchPositions[0];
                 lastTouchPosition = touchPositions[touchPositions.Count - 1];
 
-
-                if (Mathf.Abs(lastTouchPosition.x - firstTouchPosition.x) > Mathf.Abs(lastTouchPosition.y - firstTouchPosition.y))
+                if (Mathf.Abs(lastTouchPosition.x - firstTouchPosition.x) >
+                    Mathf.Abs(lastTouchPosition.y - firstTouchPosition.y))
                 {
                     //Если дистанция свайпа коротка
                     if (Mathf.Abs(lastTouchPosition.x - firstTouchPosition.x) < dragDistance)
-                    {
                         return;
-                    }
 
                     if (lastTouchPosition.x < firstTouchPosition.x)
-                    {
-                        //Свайп влево
-                        Main.self.Player.State = PlayerFSM.SwipeLeft;
-                    }
+                        Main.self.Player.State = PlayerState.SwipeLeft;
 
                     if (lastTouchPosition.x > firstTouchPosition.x)
-                    {
-                        //Свайп вправо
-                        Main.self.Player.State = PlayerFSM.SwipeRight;
-                    }
+                        Main.self.Player.State = PlayerState.SwipeRight;
                 }
                 touchPositions.Clear();
             }
+        }
+
+        void UnityEditorInput()
+        {
+            if (Input.GetKeyDown("space"))
+                Main.self.Player.State = PlayerState.Jump;
+
+            if (Input.GetKeyDown("left"))
+                Main.self.Player.State = PlayerState.SwipeLeft;
+
+            if (Input.GetKeyDown("right"))
+                Main.self.Player.State = PlayerState.SwipeRight;
         }
     }
 }
