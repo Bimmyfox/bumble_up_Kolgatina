@@ -50,23 +50,6 @@ namespace Game.Characters
             DoAction(currentState);
         }
 
-        IEnumerator Jump()
-        {
-            jumped = true;
-            rb.velocity = Vector3.zero;
-            Thrust(Vector3.up, jumpForce);
-            yield return new WaitForSeconds(0.2f);
-            StartCoroutine(SpeedUpJump());
-        }
-
-        IEnumerator SpeedUpJump()
-        {
-            Thrust(Vector3.left, jumpForce);
-            yield return new WaitForSeconds(0.1f);
-            Thrust(Vector3.down, jumpForce / 2);
-        }
-
-
         //передвижения
         void DoAction(PlayerState state)
         {
@@ -94,6 +77,7 @@ namespace Game.Characters
             StartCoroutine(Swipe(Vector3.forward));
         }
 
+ 
         IEnumerator Swipe(Vector3 destination)
         {
             Thrust(Vector3.up, jumpForce / 2f); // при движении в сторону высота прыжка меньше
@@ -101,6 +85,21 @@ namespace Game.Characters
             Thrust(destination, swipeForce);
         }
 
+        IEnumerator Jump()
+        {
+            jumped = true;
+            rb.velocity = Vector3.zero;
+            Thrust(Vector3.up, jumpForce);
+            yield return new WaitForSeconds(0.2f);
+            StartCoroutine(SpeedUpJump());
+        }
+
+        IEnumerator SpeedUpJump()
+        {
+            Thrust(Vector3.left, jumpForce);
+            yield return new WaitForSeconds(0.1f);
+            Thrust(Vector3.down, jumpForce / 2f);
+        }
 
         //столкновения
         void OnCollisionEnter(Collision collision)

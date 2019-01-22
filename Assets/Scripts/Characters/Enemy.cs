@@ -15,7 +15,6 @@ namespace Game.Characters
             base.Start();
             deltaForcesTime = 1 / thrust;
             SetRandomColor();
-            SetRandomRotation();
         }
 
         IEnumerator Jump()
@@ -42,11 +41,6 @@ namespace Game.Characters
             {
                 Destroy(gameObject);
             }
-        }
-
-        void SetRandomRotation()
-        {
-            transform.rotation = Random.rotation;
         }
 
         void SetRandomColor()

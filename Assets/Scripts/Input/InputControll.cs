@@ -48,9 +48,9 @@ namespace Game.InputControll
                 if (Mathf.Abs(lastTouchPosition.x - firstTouchPosition.x) >
                     Mathf.Abs(lastTouchPosition.y - firstTouchPosition.y))
                 {
-                    //Если дистанция свайпа коротка
-                    if (Mathf.Abs(lastTouchPosition.x - firstTouchPosition.x) < dragDistance)
-                        return;
+                    ////Если дистанция свайпа коротка
+                    //if (Mathf.Abs(lastTouchPosition.x - firstTouchPosition.x) < dragDistance)
+                    //    return;
 
                     if (lastTouchPosition.x < firstTouchPosition.x)
                         Main.self.Player.State = PlayerState.SwipeLeft;
