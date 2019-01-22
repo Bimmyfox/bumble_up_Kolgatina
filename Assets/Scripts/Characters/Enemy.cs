@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
+    [RequireComponent(typeof(Enemy))]
     public class Enemy : Unit
     {
         //jumpForce = 17f

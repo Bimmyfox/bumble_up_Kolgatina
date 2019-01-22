@@ -2,6 +2,7 @@
 
 namespace Game.Cameras
 {
+    [RequireComponent(typeof(FollowingPlayerCamera))]
     public class FollowingPlayerCamera : MonoBehaviour
     {
         [SerializeField] float moveSpeed = 3f;
