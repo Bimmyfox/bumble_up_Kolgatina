@@ -10,11 +10,12 @@ namespace Game.Characters
         [SerializeField] float thrust = 5.08f;
         [SerializeField] float speed = 1.2f;
 
-
         protected override void Start()
         {
             base.Start();
             deltaForcesTime = 1 / thrust;
+            SetRandomColor();
+            SetRandomRotation();
         }
 
         IEnumerator Jump()
@@ -41,6 +42,16 @@ namespace Game.Characters
             {
                 Destroy(gameObject);
             }
+        }
+
+        void SetRandomRotation()
+        {
+            transform.rotation = Random.rotation;
+        }
+
+        void SetRandomColor()
+        {
+            GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
         }
     }
 }

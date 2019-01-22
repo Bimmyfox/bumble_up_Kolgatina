@@ -42,7 +42,7 @@ namespace Game.Environment
                                   - distanceToPlayer + enemyScale.x) + 0.5f;
 
                 spawnPosition.y = Mathf.Floor(Main.self.Player.transform.position.y - playerScale.y)
-                                  + distanceToPlayer + 1f;
+                                  + distanceToPlayer + 2f;
 
                 spawnPosition.z = Main.self.Player.transform.position.z;
                 yield return StartCoroutine(Spawn());
