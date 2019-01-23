@@ -83,6 +83,7 @@ namespace Game.Characters
             Thrust(Vector3.up, jumpForce / 2f); // при движении в сторону высота прыжка меньше
             yield return new WaitForSeconds(0.01f);
             Thrust(destination, swipeForce);
+            StartCoroutine(SpeedUpJump());
         }
 
         IEnumerator Jump()
@@ -91,14 +92,14 @@ namespace Game.Characters
             rb.velocity = Vector3.zero;
             Thrust(Vector3.up, jumpForce);
             yield return new WaitForSeconds(0.2f);
+            Thrust(Vector3.left, jumpForce);
             StartCoroutine(SpeedUpJump());
         }
 
         IEnumerator SpeedUpJump()
         {
-            Thrust(Vector3.left, jumpForce);
             yield return new WaitForSeconds(0.1f);
-            Thrust(Vector3.down, jumpForce / 2f);
+            Thrust(Vector3.down, jumpForce / 2.0f);
         }
 
         //столкновения
