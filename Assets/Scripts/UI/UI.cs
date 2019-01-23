@@ -11,11 +11,9 @@ namespace Game.UI
         [SerializeField] Text pointsEndGame;
         [SerializeField] GameObject gameOverPanel;
 
-
-        public void Restart()
+        void Awake()
         {
             Time.timeScale = 1;
-            SceneManager.LoadScene("Main", LoadSceneMode.Single);
         }
 
         public void Exit()
@@ -27,6 +25,18 @@ namespace Game.UI
             UnityEditor.EditorApplication.isPlaying = false;
 #endif
         }
+
+        public void ReturnStartScreen()
+        {
+            SceneManager.LoadScene("Start", LoadSceneMode.Single);
+        }
+
+        public void Restart()
+        {
+            Time.timeScale = 1;
+            SceneManager.LoadScene("Main", LoadSceneMode.Single);
+        }
+
 
         void Update()
         {

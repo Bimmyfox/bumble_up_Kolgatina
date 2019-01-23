@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Game
+namespace Game.UI
 {
     public class StartGame : MonoBehaviour
     {
+        void Awake()
+        {
+            Time.timeScale = 1;
+        }
 
         void Update()
         {
