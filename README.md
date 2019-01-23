@@ -1,4 +1,4 @@
-# bumble_up_Kolgatina
+# bumble_up
 [Демонстрация(apk)](https://yadi.sk/d/4yTOzNhA5EfbZw) 
 
 Игрок это шарик на бесконечной лестнице.
